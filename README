@@ -1,0 +1,1086 @@
+Reese Johnson
+CS458 HW1: Black Jack
+
+Function Descriptions:
+
+- Note Card, Hand, and Deck objects all self explanatory objects simulating their real purpose
+
+- run_game
+    Function built to simulate the game between the player object and the simulated dealer
+    Returns a 1 if the player object wins, and 0 otherwise
+    Used in sim and play to run games for the simulations and testing
+
+- Player Class
+    Init:
+        contains the matrix generated from a calculated convergence of 5 million games run in sim
+    Sim: 
+        simulates any specified number of games, balancing exploration vs exploitation strategy
+        Sim calls run game which calls the hitme function, and Sim then records the outcomes into Scenario and Outcome counter dictionaries
+        Sim then compares the win% of hitting vs standing given the same scenario, and loads the decision w the higher win% into the decision matrix
+    Hitme:
+        The first 100 times a scenario is encountered, sim loads the decision matrix randomly
+        Afterwards, using a MCTS upper confidence bound formula, values are assigned for both the hit and stand options
+        If tracking is true (sim is called) this hitme function will continuously update the hit and stand values for each scenario
+
+
+Matrix generated from 5 million simulations: 
+format: player hand value, dealer card value, soft total? (True if Ace can become 1 else False) : hit? (= true, stay = false)
+
+{
+                          (2, 1, True) : True ,
+                          (2, 2, True) : True ,
+                          (2, 3, True) : True ,
+                          (2, 4, True) : True ,
+                          (2, 5, True) : True ,
+                          (2, 6, True) : True ,
+                          (2, 7, True) : True ,
+                          (2, 8, True) : True ,
+                          (2, 9, True) : True ,
+                          (2, 10, True) : True ,
+                          (3, 1, True) : True ,
+                          (3, 2, True) : True ,
+                          (3, 3, True) : True ,
+                          (3, 4, True) : True ,
+                          (3, 5, True) : True ,
+                          (3, 6, True) : True ,
+                          (3, 7, True) : True ,
+                          (3, 8, True) : True ,
+                          (3, 9, True) : True ,
+                          (3, 10, True) : True ,
+                          (4, 1, False) : True ,
+                          (4, 1, True) : True ,
+                          (4, 2, False) : False ,
+                          (4, 2, True) : True ,
+                          (4, 3, False) : True ,
+                          (4, 3, True) : True ,
+                          (4, 4, False) : True ,
+                          (4, 4, True) : True ,
+                          (4, 5, False) : True ,
+                          (4, 5, True) : True ,
+                          (4, 6, False) : True ,
+                          (4, 6, True) : True ,
+                          (4, 7, False) : True ,
+                          (4, 7, True) : True ,
+                          (4, 8, False) : True ,
+                          (4, 8, True) : True ,
+                          (4, 9, False) : True ,
+                          (4, 9, True) : True ,
+                          (4, 10, False) : True ,
+                          (4, 10, True) : True ,
+                          (5, 1, False) : True ,
+                          (5, 1, True) : True ,
+                          (5, 2, False) : True ,
+                          (5, 2, True) : True ,
+                          (5, 3, False) : True ,
+                          (5, 3, True) : True ,
+                          (5, 4, False) : True ,
+                          (5, 4, True) : True ,
+                          (5, 5, False) : True ,
+                          (5, 5, True) : True ,
+                          (5, 6, False) : True ,
+                          (5, 6, True) : True ,
+                          (5, 7, False) : True ,
+                          (5, 7, True) : True ,
+                          (5, 8, False) : True ,
+                          (5, 8, True) : True ,
+                          (5, 9, False) : True ,
+                          (5, 9, True) : True ,
+                          (5, 10, False) : True ,
+                          (5, 10, True) : True ,
+                          (6, 1, False) : True ,
+                          (6, 1, True) : True ,
+                          (6, 2, False) : True ,
+                          (6, 2, True) : True ,
+                          (6, 3, False) : True ,
+                          (6, 3, True) : True ,
+                          (6, 4, False) : True ,
+                          (6, 4, True) : True ,
+                          (6, 5, False) : True ,
+                          (6, 5, True) : True ,
+                          (6, 6, False) : True ,
+                          (6, 6, True) : True ,
+                          (6, 7, False) : True ,
+                          (6, 7, True) : True ,
+                          (6, 8, False) : True ,
+                          (6, 8, True) : True ,
+                          (6, 9, False) : True ,
+                          (6, 9, True) : True ,
+                          (6, 10, False) : True ,
+                          (6, 10, True) : True ,
+                          (7, 1, False) : True ,
+                          (7, 1, True) : True ,
+                          (7, 2, False) : True ,
+                          (7, 2, True) : True ,
+                          (7, 3, False) : True ,
+                          (7, 3, True) : True ,
+                          (7, 4, False) : True ,
+                          (7, 4, True) : True ,
+                          (7, 5, False) : True ,
+                          (7, 5, True) : True ,
+                          (7, 6, False) : True ,
+                          (7, 6, True) : True ,
+                          (7, 7, False) : True ,
+                          (7, 7, True) : True ,
+                          (7, 8, False) : True ,
+                          (7, 8, True) : True ,
+                          (7, 9, False) : True ,
+                          (7, 9, True) : True ,
+                          (7, 10, False) : True ,
+                          (7, 10, True) : True ,
+                          (8, 1, False) : True ,
+                          (8, 1, True) : False ,
+                          (8, 2, False) : True ,
+                          (8, 2, True) : False ,
+                          (8, 3, False) : True ,
+                          (8, 3, True) : False ,
+                          (8, 4, False) : True ,
+                          (8, 4, True) : False ,
+                          (8, 5, False) : True ,
+                          (8, 5, True) : False ,
+                          (8, 6, False) : True ,
+                          (8, 6, True) : False ,
+                          (8, 7, False) : True ,
+                          (8, 7, True) : False ,
+                          (8, 8, False) : True ,
+                          (8, 8, True) : True ,
+                          (8, 9, False) : True ,
+                          (8, 9, True) : True ,
+                          (8, 10, False) : True ,
+                          (8, 10, True) : True ,
+                          (9, 1, False) : True ,
+                          (9, 1, True) : False ,
+                          (9, 2, False) : True ,
+                          (9, 2, True) : False ,
+                          (9, 3, False) : True ,
+                          (9, 3, True) : False ,
+                          (9, 4, False) : True ,
+                          (9, 4, True) : False ,
+                          (9, 5, False) : True ,
+                          (9, 5, True) : False ,
+                          (9, 6, False) : True ,
+                          (9, 6, True) : False ,
+                          (9, 7, False) : True ,
+                          (9, 7, True) : False ,
+                          (9, 8, False) : True ,
+                          (9, 8, True) : False ,
+                          (9, 9, False) : True ,
+                          (9, 9, True) : False ,
+                          (9, 10, False) : True ,
+                          (9, 10, True) : False ,
+                          (10, 1, False) : True ,
+                          (10, 1, True) : False ,
+                          (10, 2, False) : True ,
+                          (10, 2, True) : False ,
+                          (10, 3, False) : True ,
+                          (10, 3, True) : False ,
+                          (10, 4, False) : True ,
+                          (10, 4, True) : False ,
+                          (10, 5, False) : True ,
+                          (10, 5, True) : False ,
+                          (10, 6, False) : True ,
+                          (10, 6, True) : False ,
+                          (10, 7, False) : True ,
+                          (10, 7, True) : False ,
+                          (10, 8, False) : True ,
+                          (10, 8, True) : False ,
+                          (10, 9, False) : True ,
+                          (10, 9, True) : False ,
+                          (10, 10, False) : True ,
+                          (10, 10, True) : False ,
+                          (11, 1, False) : True ,
+                          (11, 2, False) : True ,
+                          (11, 3, False) : True ,
+                          (11, 4, False) : True ,
+                          (11, 5, False) : True ,
+                          (11, 6, False) : True ,
+                          (11, 7, False) : True ,
+                          (11, 8, False) : True ,
+                          (11, 9, False) : True ,
+                          (11, 10, False) : True ,
+                          (12, 1, False) : True ,
+                          (12, 1, True) : True ,
+                          (12, 2, False) : False ,
+                          (12, 2, True) : False ,
+                          (12, 3, False) : False ,
+                          (12, 3, True) : False ,
+                          (12, 4, False) : False ,
+                          (12, 4, True) : False ,
+                          (12, 5, False) : False ,
+                          (12, 5, True) : False ,
+                          (12, 6, False) : False ,
+                          (12, 6, True) : False ,
+                          (12, 7, False) : True ,
+                          (12, 7, True) : True ,
+                          (12, 8, False) : True ,
+                          (12, 8, True) : True ,
+                          (12, 9, False) : True ,
+                          (12, 9, True) : True ,
+                          (12, 10, False) : True ,
+                          (12, 10, True) : True ,
+                          (13, 1, False) : True ,
+                          (13, 1, True) : True ,
+                          (13, 2, False) : False ,
+                          (13, 2, True) : False ,
+                          (13, 3, False) : False ,
+                          (13, 3, True) : False ,
+                          (13, 4, False) : False ,
+                          (13, 4, True) : False ,
+                          (13, 5, False) : False ,
+                          (13, 5, True) : False ,
+                          (13, 6, False) : False ,
+                          (13, 6, True) : False ,
+                          (13, 7, False) : True ,
+                          (13, 7, True) : True ,
+                          (13, 8, False) : True ,
+                          (13, 8, True) : True ,
+                          (13, 9, False) : True ,
+                          (13, 9, True) : True ,
+                          (13, 10, False) : True ,
+                          (13, 10, True) : True ,
+                          (14, 1, False) : True ,
+                          (14, 1, True) : True ,
+                          (14, 2, False) : False ,
+                          (14, 2, True) : False ,
+                          (14, 3, False) : False ,
+                          (14, 3, True) : False ,
+                          (14, 4, False) : False ,
+                          (14, 4, True) : False ,
+                          (14, 5, False) : False ,
+                          (14, 5, True) : False ,
+                          (14, 6, False) : False ,
+                          (14, 6, True) : False ,
+                          (14, 7, False) : True ,
+                          (14, 7, True) : True ,
+                          (14, 8, False) : True ,
+                          (14, 8, True) : True ,
+                          (14, 9, False) : True ,
+                          (14, 9, True) : True ,
+                          (14, 10, False) : True ,
+                          (14, 10, True) : True ,
+                          (15, 1, False) : True ,
+                          (15, 1, True) : True ,
+                          (15, 2, False) : False ,
+                          (15, 2, True) : False ,
+                          (15, 3, False) : False ,
+                          (15, 3, True) : False ,
+                          (15, 4, False) : False ,
+                          (15, 4, True) : False ,
+                          (15, 5, False) : False ,
+                          (15, 5, True) : False ,
+                          (15, 6, False) : False ,
+                          (15, 6, True) : False ,
+                          (15, 7, False) : True ,
+                          (15, 7, True) : True ,
+                          (15, 8, False) : True ,
+                          (15, 8, True) : True ,
+                          (15, 9, False) : False ,
+                          (15, 9, True) : True ,
+                          (15, 10, False) : False ,
+                          (15, 10, True) : False ,
+                          (16, 1, False) : True ,
+                          (16, 1, True) : True ,
+                          (16, 2, False) : False ,
+                          (16, 2, True) : False ,
+                          (16, 3, False) : False ,
+                          (16, 3, True) : False ,
+                          (16, 4, False) : False ,
+                          (16, 4, True) : False ,
+                          (16, 5, False) : False ,
+                          (16, 5, True) : False ,
+                          (16, 6, False) : False ,
+                          (16, 6, True) : False ,
+                          (16, 7, False) : True ,
+                          (16, 7, True) : False ,
+                          (16, 8, False) : True ,
+                          (16, 8, True) : False ,
+                          (16, 9, False) : False ,
+                          (16, 9, True) : False ,
+                          (16, 10, False) : False ,
+                          (16, 10, True) : False ,
+                          (17, 1, False) : True ,
+                          (17, 1, True) : True ,
+                          (17, 2, False) : False ,
+                          (17, 2, True) : False ,
+                          (17, 3, False) : False ,
+                          (17, 3, True) : False ,
+                          (17, 4, False) : False ,
+                          (17, 4, True) : False ,
+                          (17, 5, False) : False ,
+                          (17, 5, True) : False ,
+                          (17, 6, False) : False ,
+                          (17, 6, True) : False ,
+                          (17, 7, False) : False ,
+                          (17, 7, True) : False ,
+                          (17, 8, False) : False ,
+                          (17, 8, True) : False ,
+                          (17, 9, False) : False ,
+                          (17, 9, True) : False ,
+                          (17, 10, False) : False ,
+                          (17, 10, True) : False ,
+                          (18, 1, False) : False ,
+                          (18, 1, True) : False ,
+                          (18, 2, False) : False ,
+                          (18, 2, True) : False ,
+                          (18, 3, False) : False ,
+                          (18, 3, True) : False ,
+                          (18, 4, False) : False ,
+                          (18, 4, True) : False ,
+                          (18, 5, False) : False ,
+                          (18, 5, True) : False ,
+                          (18, 6, False) : False ,
+                          (18, 6, True) : False ,
+                          (18, 7, False) : False ,
+                          (18, 7, True) : False ,
+                          (18, 8, False) : False ,
+                          (18, 8, True) : False ,
+                          (18, 9, False) : False ,
+                          (18, 9, True) : False ,
+                          (18, 10, False) : False ,
+                          (18, 10, True) : False ,
+                          (19, 1, False) : False ,
+                          (19, 1, True) : False ,
+                          (19, 2, False) : False ,
+                          (19, 2, True) : False ,
+                          (19, 3, False) : False ,
+                          (19, 3, True) : False ,
+                          (19, 4, False) : False ,
+                          (19, 4, True) : False ,
+                          (19, 5, False) : False ,
+                          (19, 5, True) : False ,
+                          (19, 6, False) : False ,
+                          (19, 6, True) : False ,
+                          (19, 7, False) : False ,
+                          (19, 7, True) : False ,
+                          (19, 8, False) : False ,
+                          (19, 8, True) : False ,
+                          (19, 9, False) : False ,
+                          (19, 9, True) : False ,
+                          (19, 10, False) : False ,
+                          (19, 10, True) : False ,
+                          (20, 1, False) : False ,
+                          (20, 1, True) : False ,
+                          (20, 2, False) : False ,
+                          (20, 2, True) : False ,
+                          (20, 3, False) : False ,
+                          (20, 3, True) : False ,
+                          (20, 4, False) : False ,
+                          (20, 4, True) : False ,
+                          (20, 5, False) : False ,
+                          (20, 5, True) : False ,
+                          (20, 6, False) : False ,
+                          (20, 6, True) : False ,
+                          (20, 7, False) : False ,
+                          (20, 7, True) : False ,
+                          (20, 8, False) : False ,
+                          (20, 8, True) : False ,
+                          (20, 9, False) : False ,
+                          (20, 9, True) : False ,
+                          (20, 10, False) : False ,
+                          (20, 10, True) : False 
+}
+
+Below is the outputs of 5,000,000 sims with win outcome and # of occurences for each game state
+format: "scenario: (hand total, dealer face card, soft = true else false, hit=true else false)"
+
+scenario: (2, 1, True, False) occurences: 184 wins: 25
+scenario: (2, 1, True, True) occurences: 699 wins: 188
+scenario: (2, 2, True, False) occurences: 412 wins: 163
+scenario: (2, 2, True, True) occurences: 1396 wins: 676
+scenario: (2, 3, True, False) occurences: 281 wins: 114
+scenario: (2, 3, True, True) occurences: 1437 wins: 770
+scenario: (2, 4, True, False) occurences: 389 wins: 166
+scenario: (2, 4, True, True) occurences: 1422 wins: 738
+scenario: (2, 5, True, False) occurences: 225 wins: 88
+scenario: (2, 5, True, True) occurences: 1578 wins: 876
+scenario: (2, 6, True, False) occurences: 153 wins: 52
+scenario: (2, 6, True, True) occurences: 1762 wins: 990
+scenario: (2, 7, True, False) occurences: 159 wins: 48
+scenario: (2, 7, True, True) occurences: 1702 wins: 883
+scenario: (2, 8, True, False) occurences: 167 wins: 47
+scenario: (2, 8, True, True) occurences: 1597 wins: 776
+scenario: (2, 9, True, False) occurences: 296 wins: 89
+scenario: (2, 9, True, True) occurences: 1532 wins: 655
+scenario: (2, 10, True, False) occurences: 365 wins: 84
+scenario: (2, 10, True, True) occurences: 6739 wins: 2704
+scenario: (3, 1, True, False) occurences: 332 wins: 38
+scenario: (3, 1, True, True) occurences: 3308 wins: 883
+scenario: (3, 2, True, False) occurences: 796 wins: 323
+scenario: (3, 2, True, True) occurences: 2899 wins: 1379
+scenario: (3, 3, True, False) occurences: 520 wins: 194
+scenario: (3, 3, True, True) occurences: 4483 wins: 2211
+scenario: (3, 4, True, False) occurences: 399 wins: 146
+scenario: (3, 4, True, True) occurences: 4383 wins: 2241
+scenario: (3, 5, True, False) occurences: 722 wins: 325
+scenario: (3, 5, True, True) occurences: 4134 wins: 2233
+scenario: (3, 6, True, False) occurences: 656 wins: 296
+scenario: (3, 6, True, True) occurences: 4222 wins: 2323
+scenario: (3, 7, True, False) occurences: 169 wins: 39
+scenario: (3, 7, True, True) occurences: 4899 wins: 2401
+scenario: (3, 8, True, False) occurences: 260 wins: 65
+scenario: (3, 8, True, True) occurences: 4596 wins: 2045
+scenario: (3, 9, True, False) occurences: 290 wins: 68
+scenario: (3, 9, True, True) occurences: 4466 wins: 1860
+scenario: (3, 10, True, False) occurences: 360 wins: 61
+scenario: (3, 10, True, True) occurences: 19097 wins: 7107
+scenario: (4, 1, False, False) occurences: 373 wins: 42
+scenario: (4, 1, False, True) occurences: 1483 wins: 316
+scenario: (4, 1, True, False) occurences: 421 wins: 45
+scenario: (4, 1, True, True) occurences: 3563 wins: 846
+scenario: (4, 2, False, False) occurences: 135 wins: 34
+scenario: (4, 2, False, True) occurences: 787 wins: 348
+scenario: (4, 2, True, False) occurences: 536 wins: 183
+scenario: (4, 2, True, True) occurences: 4589 wins: 2121
+scenario: (4, 3, False, False) occurences: 602 wins: 222
+scenario: (4, 3, False, True) occurences: 1161 wins: 477
+scenario: (4, 3, True, False) occurences: 560 wins: 221
+scenario: (4, 3, True, True) occurences: 3446 wins: 1716
+scenario: (4, 4, False, False) occurences: 386 wins: 142
+scenario: (4, 4, False, True) occurences: 1379 wins: 636
+scenario: (4, 4, True, False) occurences: 433 wins: 164
+scenario: (4, 4, True, True) occurences: 4723 wins: 2448
+scenario: (4, 5, False, False) occurences: 875 wins: 393
+scenario: (4, 5, False, True) occurences: 942 wins: 425
+scenario: (4, 5, True, False) occurences: 731 wins: 338
+scenario: (4, 5, True, True) occurences: 4459 wins: 2478
+scenario: (4, 6, False, False) occurences: 478 wins: 211
+scenario: (4, 6, False, True) occurences: 1322 wins: 677
+scenario: (4, 6, True, False) occurences: 953 wins: 450
+scenario: (4, 6, True, True) occurences: 4359 wins: 2376
+scenario: (4, 7, False, False) occurences: 196 wins: 45
+scenario: (4, 7, False, True) occurences: 1614 wins: 666
+scenario: (4, 7, True, False) occurences: 238 wins: 62
+scenario: (4, 7, True, True) occurences: 5138 wins: 2424
+scenario: (4, 8, False, False) occurences: 156 wins: 28
+scenario: (4, 8, False, True) occurences: 1562 wins: 611
+scenario: (4, 8, True, False) occurences: 309 wins: 86
+scenario: (4, 8, True, True) occurences: 4880 wins: 2222
+scenario: (4, 9, False, False) occurences: 372 wins: 90
+scenario: (4, 9, False, True) occurences: 1459 wins: 498
+scenario: (4, 9, True, False) occurences: 372 wins: 94
+scenario: (4, 9, True, True) occurences: 4927 wins: 2016
+scenario: (4, 10, False, False) occurences: 1066 wins: 219
+scenario: (4, 10, False, True) occurences: 6229 wins: 1762
+scenario: (4, 10, True, False) occurences: 616 wins: 127
+scenario: (4, 10, True, True) occurences: 20404 wins: 7250
+scenario: (5, 1, False, False) occurences: 1151 wins: 146
+scenario: (5, 1, False, True) occurences: 3764 wins: 684
+scenario: (5, 1, True, False) occurences: 428 wins: 49
+scenario: (5, 1, True, True) occurences: 3721 wins: 914
+scenario: (5, 2, False, False) occurences: 675 wins: 215
+scenario: (5, 2, False, True) occurences: 2963 wins: 1187
+scenario: (5, 2, True, False) occurences: 481 wins: 158
+scenario: (5, 2, True, True) occurences: 4868 wins: 2233
+scenario: (5, 3, False, False) occurences: 1188 wins: 455
+scenario: (5, 3, False, True) occurences: 2483 wins: 1042
+scenario: (5, 3, True, False) occurences: 968 wins: 380
+scenario: (5, 3, True, True) occurences: 4532 wins: 2120
+scenario: (5, 4, False, False) occurences: 1640 wins: 707
+scenario: (5, 4, False, True) occurences: 3118 wins: 1433
+scenario: (5, 4, True, False) occurences: 586 wins: 234
+scenario: (5, 4, True, True) occurences: 3839 wins: 1932
+scenario: (5, 5, False, False) occurences: 1768 wins: 818
+scenario: (5, 5, False, True) occurences: 3000 wins: 1457
+scenario: (5, 5, True, False) occurences: 649 wins: 274
+scenario: (5, 5, True, True) occurences: 4835 wins: 2548
+scenario: (5, 6, False, False) occurences: 1215 wins: 538
+scenario: (5, 6, False, True) occurences: 3606 wins: 1781
+scenario: (5, 6, True, False) occurences: 1095 wins: 500
+scenario: (5, 6, True, True) occurences: 4582 wins: 2390
+scenario: (5, 7, False, False) occurences: 432 wins: 110
+scenario: (5, 7, False, True) occurences: 4450 wins: 1745
+scenario: (5, 7, True, False) occurences: 227 wins: 57
+scenario: (5, 7, True, True) occurences: 5407 wins: 2553
+scenario: (5, 8, False, False) occurences: 417 wins: 92
+scenario: (5, 8, False, True) occurences: 4396 wins: 1588
+scenario: (5, 8, True, False) occurences: 209 wins: 38
+scenario: (5, 8, True, True) occurences: 5467 wins: 2265
+scenario: (5, 9, False, False) occurences: 1040 wins: 261
+scenario: (5, 9, False, True) occurences: 3753 wins: 1177
+scenario: (5, 9, True, False) occurences: 407 wins: 95
+scenario: (5, 9, True, True) occurences: 5248 wins: 2012
+scenario: (5, 10, False, False) occurences: 2118 wins: 441
+scenario: (5, 10, False, True) occurences: 17333 wins: 4702
+scenario: (5, 10, True, False) occurences: 804 wins: 165
+scenario: (5, 10, True, True) occurences: 22031 wins: 7370
+scenario: (6, 1, False, False) occurences: 981 wins: 103
+scenario: (6, 1, False, True) occurences: 5714 wins: 1050
+scenario: (6, 1, True, False) occurences: 655 wins: 83
+scenario: (6, 1, True, True) occurences: 3966 wins: 885
+scenario: (6, 2, False, False) occurences: 1744 wins: 641
+scenario: (6, 2, False, True) occurences: 3685 wins: 1465
+scenario: (6, 2, True, False) occurences: 1108 wins: 421
+scenario: (6, 2, True, True) occurences: 4785 wins: 2143
+scenario: (6, 3, False, False) occurences: 1636 wins: 635
+scenario: (6, 3, False, True) occurences: 4154 wins: 1773
+scenario: (6, 3, True, False) occurences: 948 wins: 363
+scenario: (6, 3, True, True) occurences: 4938 wins: 2268
+scenario: (6, 4, False, False) occurences: 1431 wins: 586
+scenario: (6, 4, False, True) occurences: 4095 wins: 1870
+scenario: (6, 4, True, False) occurences: 1089 wins: 470
+scenario: (6, 4, True, True) occurences: 5003 wins: 2499
+scenario: (6, 5, False, False) occurences: 1135 wins: 477
+scenario: (6, 5, False, True) occurences: 5645 wins: 2760
+scenario: (6, 5, True, False) occurences: 1156 wins: 517
+scenario: (6, 5, True, True) occurences: 3785 wins: 1913
+scenario: (6, 6, False, False) occurences: 1437 wins: 636
+scenario: (6, 6, False, True) occurences: 5197 wins: 2570
+scenario: (6, 6, True, False) occurences: 888 wins: 403
+scenario: (6, 6, True, True) occurences: 5295 wins: 2850
+scenario: (6, 7, False, False) occurences: 797 wins: 225
+scenario: (6, 7, False, True) occurences: 5836 wins: 2196
+scenario: (6, 7, True, False) occurences: 267 wins: 63
+scenario: (6, 7, True, True) occurences: 6228 wins: 2744
+scenario: (6, 8, False, False) occurences: 644 wins: 147
+scenario: (6, 8, False, True) occurences: 6030 wins: 2049
+scenario: (6, 8, True, False) occurences: 324 wins: 75
+scenario: (6, 8, True, True) occurences: 6097 wins: 2509
+scenario: (6, 9, False, False) occurences: 1095 wins: 254
+scenario: (6, 9, False, True) occurences: 5575 wins: 1690
+scenario: (6, 9, True, False) occurences: 564 wins: 136
+scenario: (6, 9, True, True) occurences: 5806 wins: 2109
+scenario: (6, 10, False, False) occurences: 2376 wins: 493
+scenario: (6, 10, False, True) occurences: 24148 wins: 6568
+scenario: (6, 10, True, False) occurences: 647 wins: 116
+scenario: (6, 10, True, True) occurences: 25191 wins: 8277
+scenario: (7, 1, False, False) occurences: 1637 wins: 191
+scenario: (7, 1, False, True) occurences: 8365 wins: 1483
+scenario: (7, 1, True, False) occurences: 773 wins: 96
+scenario: (7, 1, True, True) occurences: 4242 wins: 889
+scenario: (7, 2, False, False) occurences: 1536 wins: 533
+scenario: (7, 2, False, True) occurences: 7022 wins: 2844
+scenario: (7, 2, True, False) occurences: 1073 wins: 397
+scenario: (7, 2, True, True) occurences: 5211 wins: 2292
+scenario: (7, 3, False, False) occurences: 4088 wins: 1686
+scenario: (7, 3, False, True) occurences: 4847 wins: 2032
+scenario: (7, 3, True, False) occurences: 448 wins: 145
+scenario: (7, 3, True, True) occurences: 6054 wins: 2835
+scenario: (7, 4, False, False) occurences: 2483 wins: 1054
+scenario: (7, 4, False, True) occurences: 6230 wins: 2842
+scenario: (7, 4, True, False) occurences: 1064 wins: 439
+scenario: (7, 4, True, True) occurences: 5326 wins: 2590
+scenario: (7, 5, False, False) occurences: 2041 wins: 916
+scenario: (7, 5, False, True) occurences: 6683 wins: 3276
+scenario: (7, 5, True, False) occurences: 577 wins: 235
+scenario: (7, 5, True, True) occurences: 6159 wins: 3258
+scenario: (7, 6, False, False) occurences: 2609 wins: 1191
+scenario: (7, 6, False, True) occurences: 7390 wins: 3628
+scenario: (7, 6, True, False) occurences: 902 wins: 417
+scenario: (7, 6, True, True) occurences: 4504 wins: 2431
+scenario: (7, 7, False, False) occurences: 862 wins: 234
+scenario: (7, 7, False, True) occurences: 9124 wins: 3411
+scenario: (7, 7, True, False) occurences: 361 wins: 95
+scenario: (7, 7, True, True) occurences: 6640 wins: 2878
+scenario: (7, 8, False, False) occurences: 955 wins: 228
+scenario: (7, 8, False, True) occurences: 9082 wins: 3024
+scenario: (7, 8, True, False) occurences: 321 wins: 71
+scenario: (7, 8, True, True) occurences: 6755 wins: 2743
+scenario: (7, 9, False, False) occurences: 1195 wins: 259
+scenario: (7, 9, False, True) occurences: 8770 wins: 2602
+scenario: (7, 9, True, False) occurences: 657 wins: 170
+scenario: (7, 9, True, True) occurences: 6175 wins: 2285
+scenario: (7, 10, False, False) occurences: 4004 wins: 865
+scenario: (7, 10, False, True) occurences: 36209 wins: 9586
+scenario: (7, 10, True, False) occurences: 1086 wins: 229
+scenario: (7, 10, True, True) occurences: 26630 wins: 8537
+scenario: (8, 1, False, False) occurences: 1030 wins: 127
+scenario: (8, 1, False, True) occurences: 11163 wins: 2430
+scenario: (8, 1, True, False) occurences: 3006 wins: 729
+scenario: (8, 1, True, True) occurences: 2451 wins: 581
+scenario: (8, 2, False, False) occurences: 887 wins: 311
+scenario: (8, 2, False, True) occurences: 9774 wins: 4417
+scenario: (8, 2, True, False) occurences: 5967 wins: 2990
+scenario: (8, 2, True, True) occurences: 1163 wins: 502
+scenario: (8, 3, False, False) occurences: 1102 wins: 429
+scenario: (8, 3, False, True) occurences: 9647 wins: 4587
+scenario: (8, 3, True, False) occurences: 5021 wins: 2602
+scenario: (8, 3, True, True) occurences: 1907 wins: 917
+scenario: (8, 4, False, False) occurences: 1188 wins: 499
+scenario: (8, 4, False, True) occurences: 9933 wins: 4998
+scenario: (8, 4, True, False) occurences: 4243 wins: 2273
+scenario: (8, 4, True, True) occurences: 2797 wins: 1457
+scenario: (8, 5, False, False) occurences: 1104 wins: 488
+scenario: (8, 5, False, True) occurences: 9828 wins: 5213
+scenario: (8, 5, True, False) occurences: 5046 wins: 2845
+scenario: (8, 5, True, True) occurences: 2195 wins: 1171
+scenario: (8, 6, False, False) occurences: 740 wins: 319
+scenario: (8, 6, False, True) occurences: 10293 wins: 5635
+scenario: (8, 6, True, False) occurences: 5663 wins: 3288
+scenario: (8, 6, True, True) occurences: 1597 wins: 848
+scenario: (8, 7, False, False) occurences: 264 wins: 65
+scenario: (8, 7, False, True) occurences: 12100 wins: 5746
+scenario: (8, 7, True, False) occurences: 6349 wins: 4081
+scenario: (8, 7, True, True) occurences: 166 wins: 61
+scenario: (8, 8, False, False) occurences: 436 wins: 91
+scenario: (8, 8, False, True) occurences: 11970 wins: 4515
+scenario: (8, 8, True, False) occurences: 1647 wins: 619
+scenario: (8, 8, True, True) occurences: 6138 wins: 2621
+scenario: (8, 9, False, False) occurences: 812 wins: 181
+scenario: (8, 9, False, True) occurences: 11278 wins: 3772
+scenario: (8, 9, True, False) occurences: 2609 wins: 969
+scenario: (8, 9, True, True) occurences: 5079 wins: 2013
+scenario: (8, 10, False, False) occurences: 2200 wins: 490
+scenario: (8, 10, False, True) occurences: 47130 wins: 14167
+scenario: (8, 10, True, False) occurences: 8056 wins: 2635
+scenario: (8, 10, True, True) occurences: 23177 wins: 8066
+scenario: (9, 1, False, False) occurences: 775 wins: 100
+scenario: (9, 1, False, True) occurences: 14988 wins: 3766
+scenario: (9, 1, True, False) occurences: 5166 wins: 1859
+scenario: (9, 1, True, True) occurences: 733 wins: 193
+scenario: (9, 2, False, False) occurences: 668 wins: 247
+scenario: (9, 2, False, True) occurences: 13654 wins: 6857
+scenario: (9, 2, True, False) occurences: 7215 wins: 4545
+scenario: (9, 2, True, True) occurences: 224 wins: 89
+scenario: (9, 3, False, False) occurences: 466 wins: 169
+scenario: (9, 3, False, True) occurences: 13622 wins: 7193
+scenario: (9, 3, True, False) occurences: 7326 wins: 4738
+scenario: (9, 3, True, True) occurences: 127 wins: 40
+scenario: (9, 4, False, False) occurences: 751 wins: 325
+scenario: (9, 4, False, True) occurences: 13486 wins: 7485
+scenario: (9, 4, True, False) occurences: 7199 wins: 4642
+scenario: (9, 4, True, True) occurences: 516 wins: 262
+scenario: (9, 5, False, False) occurences: 541 wins: 227
+scenario: (9, 5, False, True) occurences: 13801 wins: 7885
+scenario: (9, 5, True, False) occurences: 7246 wins: 4866
+scenario: (9, 5, True, True) occurences: 379 wins: 190
+scenario: (9, 6, False, False) occurences: 552 wins: 239
+scenario: (9, 6, False, True) occurences: 13882 wins: 8096
+scenario: (9, 6, True, False) occurences: 7400 wins: 5104
+scenario: (9, 6, True, True) occurences: 211 wins: 94
+scenario: (9, 7, False, False) occurences: 144 wins: 31
+scenario: (9, 7, False, True) occurences: 14587 wins: 7946
+scenario: (9, 7, True, False) occurences: 7905 wins: 6048
+scenario: (9, 7, True, True) occurences: 101 wins: 31
+scenario: (9, 8, False, False) occurences: 218 wins: 50
+scenario: (9, 8, False, True) occurences: 15987 wins: 7899
+scenario: (9, 8, True, False) occurences: 7114 wins: 5385
+scenario: (9, 8, True, True) occurences: 107 wins: 33
+scenario: (9, 9, False, False) occurences: 645 wins: 163
+scenario: (9, 9, False, True) occurences: 15066 wins: 5880
+scenario: (9, 9, True, False) occurences: 7196 wins: 3350
+scenario: (9, 9, True, True) occurences: 988 wins: 376
+scenario: (9, 10, False, False) occurences: 969 wins: 200
+scenario: (9, 10, False, True) occurences: 62699 wins: 21261
+scenario: (9, 10, True, False) occurences: 32293 wins: 14206
+scenario: (9, 10, True, True) occurences: 1492 wins: 527
+scenario: (10, 1, False, False) occurences: 394 wins: 47
+scenario: (10, 1, False, True) occurences: 18068 wins: 5596
+scenario: (10, 1, True, False) occurences: 6102 wins: 2997
+scenario: (10, 1, True, True) occurences: 124 wins: 21
+scenario: (10, 2, False, False) occurences: 562 wins: 233
+scenario: (10, 2, False, True) occurences: 16078 wins: 9098
+scenario: (10, 2, True, False) occurences: 7820 wins: 5990
+scenario: (10, 2, True, True) occurences: 138 wins: 62
+scenario: (10, 3, False, False) occurences: 361 wins: 139
+scenario: (10, 3, False, True) occurences: 16317 wins: 9518
+scenario: (10, 3, True, False) occurences: 7961 wins: 6011
+scenario: (10, 3, True, True) occurences: 101 wins: 34
+scenario: (10, 4, False, False) occurences: 399 wins: 165
+scenario: (10, 4, False, True) occurences: 16293 wins: 9794
+scenario: (10, 4, True, False) occurences: 7984 wins: 6217
+scenario: (10, 4, True, True) occurences: 101 wins: 36
+scenario: (10, 5, False, False) occurences: 351 wins: 146
+scenario: (10, 5, False, True) occurences: 16782 wins: 10386
+scenario: (10, 5, True, False) occurences: 7820 wins: 6208
+scenario: (10, 5, True, True) occurences: 118 wins: 43
+scenario: (10, 6, False, False) occurences: 330 wins: 139
+scenario: (10, 6, False, True) occurences: 16858 wins: 10630
+scenario: (10, 6, True, False) occurences: 7828 wins: 6270
+scenario: (10, 6, True, True) occurences: 101 wins: 36
+scenario: (10, 7, False, False) occurences: 143 wins: 36
+scenario: (10, 7, False, True) occurences: 17504 wins: 10335
+scenario: (10, 7, True, False) occurences: 8364 wins: 7112
+scenario: (10, 7, True, True) occurences: 101 wins: 40
+scenario: (10, 8, False, False) occurences: 144 wins: 32
+scenario: (10, 8, False, True) occurences: 17503 wins: 9787
+scenario: (10, 8, True, False) occurences: 8787 wins: 7565
+scenario: (10, 8, True, True) occurences: 101 wins: 43
+scenario: (10, 9, False, False) occurences: 181 wins: 38
+scenario: (10, 9, False, True) occurences: 18289 wins: 9303
+scenario: (10, 9, True, False) occurences: 7421 wins: 6236
+scenario: (10, 9, True, True) occurences: 110 wins: 40
+scenario: (10, 10, False, False) occurences: 423 wins: 79
+scenario: (10, 10, False, True) occurences: 74334 wins: 29721
+scenario: (10, 10, True, False) occurences: 35440 wins: 19784
+scenario: (10, 10, True, True) occurences: 372 wins: 128
+scenario: (11, 1, False, False) occurences: 235 wins: 23
+scenario: (11, 1, False, True) occurences: 22558 wins: 8144
+scenario: (11, 2, False, False) occurences: 269 wins: 95
+scenario: (11, 2, False, True) occurences: 20421 wins: 12157
+scenario: (11, 3, False, False) occurences: 334 wins: 130
+scenario: (11, 3, False, True) occurences: 20345 wins: 12265
+scenario: (11, 4, False, False) occurences: 309 wins: 122
+scenario: (11, 4, False, True) occurences: 20882 wins: 12948
+scenario: (11, 5, False, False) occurences: 275 wins: 111
+scenario: (11, 5, False, True) occurences: 20682 wins: 13286
+scenario: (11, 6, False, False) occurences: 346 wins: 155
+scenario: (11, 6, False, True) occurences: 20605 wins: 13550
+scenario: (11, 7, False, False) occurences: 104 wins: 20
+scenario: (11, 7, False, True) occurences: 21516 wins: 12960
+scenario: (11, 8, False, False) occurences: 173 wins: 44
+scenario: (11, 8, False, True) occurences: 21471 wins: 12120
+scenario: (11, 9, False, False) occurences: 140 wins: 25
+scenario: (11, 9, False, True) occurences: 21351 wins: 11271
+scenario: (11, 10, False, False) occurences: 320 wins: 69
+scenario: (11, 10, False, True) occurences: 91494 wins: 42805
+scenario: (12, 1, False, False) occurences: 2658 wins: 312
+scenario: (12, 1, False, True) occurences: 38021 wins: 6977
+scenario: (12, 1, True, False) occurences: 747 wins: 81
+scenario: (12, 1, True, True) occurences: 2643 wins: 462
+scenario: (12, 2, False, False) occurences: 19462 wins: 6832
+scenario: (12, 2, False, True) occurences: 14874 wins: 5154
+scenario: (12, 2, True, False) occurences: 3664 wins: 1338
+scenario: (12, 2, True, True) occurences: 516 wins: 130
+scenario: (12, 3, False, False) occurences: 26612 wins: 9959
+scenario: (12, 3, False, True) occurences: 11296 wins: 4052
+scenario: (12, 3, True, False) occurences: 3321 wins: 1249
+scenario: (12, 3, True, True) occurences: 974 wins: 307
+scenario: (12, 4, False, False) occurences: 32519 wins: 13034
+scenario: (12, 4, False, True) occurences: 5504 wins: 2005
+scenario: (12, 4, True, False) occurences: 3539 wins: 1488
+scenario: (12, 4, True, True) occurences: 829 wins: 286
+scenario: (12, 5, False, False) occurences: 35155 wins: 15249
+scenario: (12, 5, False, True) occurences: 3634 wins: 1388
+scenario: (12, 5, True, False) occurences: 4110 wins: 1845
+scenario: (12, 5, True, True) occurences: 223 wins: 53
+scenario: (12, 6, False, False) occurences: 34673 wins: 14698
+scenario: (12, 6, False, True) occurences: 4467 wins: 1696
+scenario: (12, 6, True, False) occurences: 3854 wins: 1718
+scenario: (12, 6, True, True) occurences: 349 wins: 102
+scenario: (12, 7, False, False) occurences: 1259 wins: 297
+scenario: (12, 7, False, True) occurences: 38044 wins: 13030
+scenario: (12, 7, True, False) occurences: 708 wins: 179
+scenario: (12, 7, True, True) occurences: 3880 wins: 1325
+scenario: (12, 8, False, False) occurences: 2880 wins: 712
+scenario: (12, 8, False, True) occurences: 36591 wins: 11313
+scenario: (12, 8, True, False) occurences: 782 wins: 179
+scenario: (12, 8, True, True) occurences: 4144 wins: 1294
+scenario: (12, 9, False, False) occurences: 3628 wins: 835
+scenario: (12, 9, False, True) occurences: 35716 wins: 10086
+scenario: (12, 9, True, False) occurences: 1686 wins: 404
+scenario: (12, 9, True, True) occurences: 3091 wins: 827
+scenario: (12, 10, False, False) occurences: 9024 wins: 1962
+scenario: (12, 10, False, True) occurences: 148594 wins: 38078
+scenario: (12, 10, True, False) occurences: 2737 wins: 546
+scenario: (12, 10, True, True) occurences: 17973 wins: 4532
+scenario: (13, 1, False, False) occurences: 3297 wins: 389
+scenario: (13, 1, False, True) occurences: 36760 wins: 6402
+scenario: (13, 1, True, False) occurences: 1174 wins: 139
+scenario: (13, 1, True, True) occurences: 3834 wins: 666
+scenario: (13, 2, False, False) occurences: 33859 wins: 12126
+scenario: (13, 2, False, True) occurences: 4892 wins: 1550
+scenario: (13, 2, True, False) occurences: 2984 wins: 1062
+scenario: (13, 2, True, True) occurences: 774 wins: 218
+scenario: (13, 3, False, False) occurences: 31718 wins: 12014
+scenario: (13, 3, False, True) occurences: 2527 wins: 792
+scenario: (13, 3, True, False) occurences: 3335 wins: 1292
+scenario: (13, 3, True, True) occurences: 652 wins: 194
+scenario: (13, 4, False, False) occurences: 36872 wins: 15055
+scenario: (13, 4, False, True) occurences: 1197 wins: 358
+scenario: (13, 4, True, False) occurences: 3153 wins: 1293
+scenario: (13, 4, True, True) occurences: 463 wins: 135
+scenario: (13, 5, False, False) occurences: 36931 wins: 16194
+scenario: (13, 5, False, True) occurences: 1482 wins: 508
+scenario: (13, 5, True, False) occurences: 3012 wins: 1305
+scenario: (13, 5, True, True) occurences: 308 wins: 85
+scenario: (13, 6, False, False) occurences: 36041 wins: 15274
+scenario: (13, 6, False, True) occurences: 2401 wins: 850
+scenario: (13, 6, True, False) occurences: 2984 wins: 1280
+scenario: (13, 6, True, True) occurences: 349 wins: 100
+scenario: (13, 7, False, False) occurences: 3340 wins: 873
+scenario: (13, 7, False, True) occurences: 35575 wins: 11268
+scenario: (13, 7, True, False) occurences: 1498 wins: 382
+scenario: (13, 7, True, True) occurences: 5145 wins: 1585
+scenario: (13, 8, False, False) occurences: 4458 wins: 1077
+scenario: (13, 8, False, True) occurences: 34711 wins: 9923
+scenario: (13, 8, True, False) occurences: 2415 wins: 593
+scenario: (13, 8, True, True) occurences: 4477 wins: 1202
+scenario: (13, 9, False, False) occurences: 5885 wins: 1397
+scenario: (13, 9, False, True) occurences: 33049 wins: 8991
+scenario: (13, 9, True, False) occurences: 1473 wins: 323
+scenario: (13, 9, True, True) occurences: 5173 wins: 1400
+scenario: (13, 10, False, False) occurences: 23630 wins: 5151
+scenario: (13, 10, False, True) occurences: 134128 wins: 31744
+scenario: (13, 10, True, False) occurences: 5941 wins: 1305
+scenario: (13, 10, True, True) occurences: 22354 wins: 5547
+scenario: (14, 1, False, False) occurences: 3839 wins: 426
+scenario: (14, 1, False, True) occurences: 36406 wins: 5850
+scenario: (14, 1, True, False) occurences: 1609 wins: 187
+scenario: (14, 1, True, True) occurences: 3359 wins: 497
+scenario: (14, 2, False, False) occurences: 35737 wins: 12762
+scenario: (14, 2, False, True) occurences: 1655 wins: 444
+scenario: (14, 2, True, False) occurences: 3011 wins: 1087
+scenario: (14, 2, True, True) occurences: 355 wins: 78
+scenario: (14, 3, False, False) occurences: 35635 wins: 13531
+scenario: (14, 3, False, True) occurences: 1369 wins: 383
+scenario: (14, 3, True, False) occurences: 2613 wins: 988
+scenario: (14, 3, True, True) occurences: 315 wins: 72
+scenario: (14, 4, False, False) occurences: 31011 wins: 12573
+scenario: (14, 4, False, True) occurences: 917 wins: 257
+scenario: (14, 4, True, False) occurences: 2819 wins: 1165
+scenario: (14, 4, True, True) occurences: 316 wins: 83
+scenario: (14, 5, False, False) occurences: 34491 wins: 15074
+scenario: (14, 5, False, True) occurences: 1113 wins: 361
+scenario: (14, 5, True, False) occurences: 2759 wins: 1212
+scenario: (14, 5, True, True) occurences: 205 wins: 48
+scenario: (14, 6, False, False) occurences: 35392 wins: 15189
+scenario: (14, 6, False, True) occurences: 719 wins: 203
+scenario: (14, 6, True, False) occurences: 2809 wins: 1228
+scenario: (14, 6, True, True) occurences: 194 wins: 43
+scenario: (14, 7, False, False) occurences: 5125 wins: 1309
+scenario: (14, 7, False, True) occurences: 34078 wins: 10049
+scenario: (14, 7, True, False) occurences: 3540 wins: 1003
+scenario: (14, 7, True, True) occurences: 3018 wins: 839
+scenario: (14, 8, False, False) occurences: 4239 wins: 1002
+scenario: (14, 8, False, True) occurences: 34896 wins: 9872
+scenario: (14, 8, True, False) occurences: 1622 wins: 385
+scenario: (14, 8, True, True) occurences: 5232 wins: 1485
+scenario: (14, 9, False, False) occurences: 7858 wins: 1780
+scenario: (14, 9, False, True) occurences: 30918 wins: 7801
+scenario: (14, 9, True, False) occurences: 1657 wins: 337
+scenario: (14, 9, True, True) occurences: 4974 wins: 1231
+scenario: (14, 10, False, False) occurences: 50279 wins: 10683
+scenario: (14, 10, False, True) occurences: 107456 wins: 23613
+scenario: (14, 10, True, False) occurences: 13110 wins: 2849
+scenario: (14, 10, True, True) occurences: 14837 wins: 3277
+scenario: (15, 1, False, False) occurences: 6651 wins: 759
+scenario: (15, 1, False, True) occurences: 36001 wins: 5274
+scenario: (15, 1, True, False) occurences: 1226 wins: 125
+scenario: (15, 1, True, True) occurences: 3659 wins: 557
+scenario: (15, 2, False, False) occurences: 35265 wins: 12615
+scenario: (15, 2, False, True) occurences: 1693 wins: 458
+scenario: (15, 2, True, False) occurences: 2522 wins: 886
+scenario: (15, 2, True, True) occurences: 244 wins: 42
+scenario: (15, 3, False, False) occurences: 35554 wins: 13642
+scenario: (15, 3, False, True) occurences: 422 wins: 78
+scenario: (15, 3, True, False) occurences: 2530 wins: 952
+scenario: (15, 3, True, True) occurences: 262 wins: 59
+scenario: (15, 4, False, False) occurences: 34757 wins: 14074
+scenario: (15, 4, False, True) occurences: 665 wins: 167
+scenario: (15, 4, True, False) occurences: 2376 wins: 980
+scenario: (15, 4, True, True) occurences: 246 wins: 59
+scenario: (15, 5, False, False) occurences: 30346 wins: 13114
+scenario: (15, 5, False, True) occurences: 376 wins: 84
+scenario: (15, 5, True, False) occurences: 2570 wins: 1077
+scenario: (15, 5, True, True) occurences: 180 wins: 36
+scenario: (15, 6, False, False) occurences: 34518 wins: 14826
+scenario: (15, 6, False, True) occurences: 515 wins: 130
+scenario: (15, 6, True, False) occurences: 2434 wins: 1086
+scenario: (15, 6, True, True) occurences: 130 wins: 23
+scenario: (15, 7, False, False) occurences: 6904 wins: 1740
+scenario: (15, 7, False, True) occurences: 34115 wins: 9650
+scenario: (15, 7, True, False) occurences: 2351 wins: 625
+scenario: (15, 7, True, True) occurences: 4214 wins: 1213
+scenario: (15, 8, False, False) occurences: 10529 wins: 2532
+scenario: (15, 8, False, True) occurences: 29892 wins: 7753
+scenario: (15, 8, True, False) occurences: 2048 wins: 466
+scenario: (15, 8, True, True) occurences: 4892 wins: 1276
+scenario: (15, 9, False, False) occurences: 18969 wins: 4374
+scenario: (15, 9, False, True) occurences: 21548 wins: 5008
+scenario: (15, 9, True, False) occurences: 3410 wins: 790
+scenario: (15, 9, True, True) occurences: 3169 wins: 728
+scenario: (15, 10, False, False) occurences: 125362 wins: 26556
+scenario: (15, 10, False, True) occurences: 39297 wins: 7905
+scenario: (15, 10, True, False) occurences: 19064 wins: 4165
+scenario: (15, 10, True, True) occurences: 6517 wins: 1268
+scenario: (16, 1, False, False) occurences: 9136 wins: 1093
+scenario: (16, 1, False, True) occurences: 32963 wins: 4711
+scenario: (16, 1, True, False) occurences: 2054 wins: 225
+scenario: (16, 1, True, True) occurences: 3071 wins: 387
+scenario: (16, 2, False, False) occurences: 33361 wins: 11915
+scenario: (16, 2, False, True) occurences: 732 wins: 156
+scenario: (16, 2, True, False) occurences: 2139 wins: 771
+scenario: (16, 2, True, True) occurences: 251 wins: 49
+scenario: (16, 3, False, False) occurences: 32613 wins: 12370
+scenario: (16, 3, False, True) occurences: 839 wins: 207
+scenario: (16, 3, True, False) occurences: 2275 wins: 841
+scenario: (16, 3, True, True) occurences: 243 wins: 48
+scenario: (16, 4, False, False) occurences: 32386 wins: 13088
+scenario: (16, 4, False, True) occurences: 441 wins: 93
+scenario: (16, 4, True, False) occurences: 2330 wins: 999
+scenario: (16, 4, True, True) occurences: 133 wins: 22
+scenario: (16, 5, False, False) occurences: 32670 wins: 14058
+scenario: (16, 5, False, True) occurences: 368 wins: 80
+scenario: (16, 5, True, False) occurences: 1973 wins: 862
+scenario: (16, 5, True, True) occurences: 101 wins: 11
+scenario: (16, 6, False, False) occurences: 27716 wins: 11549
+scenario: (16, 6, False, True) occurences: 574 wins: 146
+scenario: (16, 6, True, False) occurences: 2249 wins: 1001
+scenario: (16, 6, True, True) occurences: 123 wins: 21
+scenario: (16, 7, False, False) occurences: 7684 wins: 1892
+scenario: (16, 7, False, True) occurences: 32458 wins: 8871
+scenario: (16, 7, True, False) occurences: 4427 wins: 1201
+scenario: (16, 7, True, True) occurences: 2322 wins: 574
+scenario: (16, 8, False, False) occurences: 14753 wins: 3545
+scenario: (16, 8, False, True) occurences: 25820 wins: 6442
+scenario: (16, 8, True, False) occurences: 3348 wins: 834
+scenario: (16, 8, True, True) occurences: 3385 wins: 855
+scenario: (16, 9, False, False) occurences: 27389 wins: 6445
+scenario: (16, 9, False, True) occurences: 12345 wins: 2733
+scenario: (16, 9, True, False) occurences: 4076 wins: 914
+scenario: (16, 9, True, True) occurences: 1729 wins: 327
+scenario: (16, 10, False, False) occurences: 142342 wins: 30109
+scenario: (16, 10, False, True) occurences: 17874 wins: 3355
+scenario: (16, 10, True, False) occurences: 16344 wins: 3534
+scenario: (16, 10, True, True) occurences: 3728 wins: 663
+scenario: (17, 1, False, False) occurences: 13346 wins: 1541
+scenario: (17, 1, False, True) occurences: 29946 wins: 3851
+scenario: (17, 1, True, False) occurences: 2482 wins: 304
+scenario: (17, 1, True, True) occurences: 2421 wins: 294
+scenario: (17, 2, False, False) occurences: 32285 wins: 11452
+scenario: (17, 2, False, True) occurences: 522 wins: 94
+scenario: (17, 2, True, False) occurences: 1763 wins: 552
+scenario: (17, 2, True, True) occurences: 344 wins: 67
+scenario: (17, 3, False, False) occurences: 31074 wins: 11652
+scenario: (17, 3, False, True) occurences: 465 wins: 88
+scenario: (17, 3, True, False) occurences: 2213 wins: 835
+scenario: (17, 3, True, True) occurences: 138 wins: 17
+scenario: (17, 4, False, False) occurences: 31155 wins: 12666
+scenario: (17, 4, False, True) occurences: 304 wins: 52
+scenario: (17, 4, True, False) occurences: 2112 wins: 835
+scenario: (17, 4, True, True) occurences: 128 wins: 17
+scenario: (17, 5, False, False) occurences: 31303 wins: 13286
+scenario: (17, 5, False, True) occurences: 287 wins: 52
+scenario: (17, 5, True, False) occurences: 2211 wins: 1014
+scenario: (17, 5, True, True) occurences: 101 wins: 11
+scenario: (17, 6, False, False) occurences: 31489 wins: 13062
+scenario: (17, 6, False, True) occurences: 335 wins: 64
+scenario: (17, 6, True, False) occurences: 1622 wins: 742
+scenario: (17, 6, True, True) occurences: 115 wins: 22
+scenario: (17, 7, False, False) occurences: 27428 wins: 7116
+scenario: (17, 7, False, True) occurences: 11106 wins: 2705
+scenario: (17, 7, True, False) occurences: 4153 wins: 1103
+scenario: (17, 7, True, True) occurences: 2033 wins: 483
+scenario: (17, 8, False, False) occurences: 26407 wins: 6283
+scenario: (17, 8, False, True) occurences: 15005 wins: 3434
+scenario: (17, 8, True, False) occurences: 4337 wins: 1032
+scenario: (17, 8, True, True) occurences: 2154 wins: 461
+scenario: (17, 9, False, False) occurences: 34162 wins: 7961
+scenario: (17, 9, False, True) occurences: 6013 wins: 1197
+scenario: (17, 9, True, False) occurences: 3920 wins: 978
+scenario: (17, 9, True, True) occurences: 973 wins: 177
+scenario: (17, 10, False, False) occurences: 150855 wins: 32688
+scenario: (17, 10, False, True) occurences: 6815 wins: 1158
+scenario: (17, 10, True, False) occurences: 14416 wins: 3113
+scenario: (17, 10, True, True) occurences: 2344 wins: 378
+scenario: (18, 1, False, False) occurences: 42021 wins: 10242
+scenario: (18, 1, False, True) occurences: 886 wins: 98
+scenario: (18, 1, True, False) occurences: 3769 wins: 909
+scenario: (18, 1, True, True) occurences: 351 wins: 31
+scenario: (18, 2, False, False) occurences: 29746 wins: 14735
+scenario: (18, 2, False, True) occurences: 163 wins: 27
+scenario: (18, 2, True, False) occurences: 523 wins: 262
+scenario: (18, 2, True, True) occurences: 113 wins: 10
+scenario: (18, 3, False, False) occurences: 29413 wins: 14998
+scenario: (18, 3, False, True) occurences: 106 wins: 10
+scenario: (18, 3, True, False) occurences: 758 wins: 407
+scenario: (18, 3, True, True) occurences: 107 wins: 10
+scenario: (18, 4, False, False) occurences: 28869 wins: 15290
+scenario: (18, 4, False, True) occurences: 106 wins: 12
+scenario: (18, 4, True, False) occurences: 1059 wins: 573
+scenario: (18, 4, True, True) occurences: 101 wins: 15
+scenario: (18, 5, False, False) occurences: 28769 wins: 15668
+scenario: (18, 5, False, True) occurences: 147 wins: 29
+scenario: (18, 5, True, False) occurences: 729 wins: 403
+scenario: (18, 5, True, True) occurences: 101 wins: 10
+scenario: (18, 6, False, False) occurences: 28953 wins: 16981
+scenario: (18, 6, False, True) occurences: 101 wins: 11
+scenario: (18, 6, True, False) occurences: 569 wins: 310
+scenario: (18, 6, True, True) occurences: 115 wins: 19
+scenario: (18, 7, False, False) occurences: 42090 wins: 26506
+scenario: (18, 7, False, True) occurences: 103 wins: 20
+scenario: (18, 7, True, False) occurences: 2496 wins: 1616
+scenario: (18, 7, True, True) occurences: 117 wins: 23
+scenario: (18, 8, False, False) occurences: 36421 wins: 13311
+scenario: (18, 8, False, True) occurences: 552 wins: 107
+scenario: (18, 8, True, False) occurences: 4995 wins: 1852
+scenario: (18, 8, True, True) occurences: 199 wins: 27
+scenario: (18, 9, False, False) occurences: 37834 wins: 13256
+scenario: (18, 9, False, True) occurences: 440 wins: 68
+scenario: (18, 9, True, False) occurences: 3537 wins: 1281
+scenario: (18, 9, True, True) occurences: 144 wins: 13
+scenario: (18, 10, False, False) occurences: 146209 wins: 48434
+scenario: (18, 10, False, True) occurences: 427 wins: 46
+scenario: (18, 10, True, False) occurences: 12920 wins: 4240
+scenario: (18, 10, True, True) occurences: 274 wins: 28
+scenario: (19, 1, False, False) occurences: 43522 wins: 16194
+scenario: (19, 1, False, True) occurences: 216 wins: 17
+scenario: (19, 1, True, False) occurences: 1786 wins: 632
+scenario: (19, 1, True, True) occurences: 106 wins: 7
+scenario: (19, 2, False, False) occurences: 28450 wins: 17876
+scenario: (19, 2, False, True) occurences: 101 wins: 5
+scenario: (19, 2, True, False) occurences: 187 wins: 116
+scenario: (19, 2, True, True) occurences: 101 wins: 10
+scenario: (19, 3, False, False) occurences: 28000 wins: 17654
+scenario: (19, 3, False, True) occurences: 101 wins: 4
+scenario: (19, 3, True, False) occurences: 155 wins: 109
+scenario: (19, 3, True, True) occurences: 101 wins: 11
+scenario: (19, 4, False, False) occurences: 27365 wins: 17656
+scenario: (19, 4, False, True) occurences: 101 wins: 8
+scenario: (19, 4, True, False) occurences: 249 wins: 160
+scenario: (19, 4, True, True) occurences: 105 wins: 8
+scenario: (19, 5, False, False) occurences: 27032 wins: 18017
+scenario: (19, 5, False, True) occurences: 121 wins: 11
+scenario: (19, 5, True, False) occurences: 102 wins: 68
+scenario: (19, 5, True, True) occurences: 112 wins: 17
+scenario: (19, 6, False, False) occurences: 27549 wins: 18951
+scenario: (19, 6, False, True) occurences: 101 wins: 10
+scenario: (19, 6, True, False) occurences: 96 wins: 68
+scenario: (19, 6, True, True) occurences: 96 wins: 4
+scenario: (19, 7, False, False) occurences: 40638 wins: 31278
+scenario: (19, 7, False, True) occurences: 101 wins: 13
+scenario: (19, 7, True, False) occurences: 1415 wins: 1075
+scenario: (19, 7, True, True) occurences: 101 wins: 8
+scenario: (19, 8, False, False) occurences: 40993 wins: 29964
+scenario: (19, 8, False, True) occurences: 101 wins: 9
+scenario: (19, 8, True, False) occurences: 1921 wins: 1441
+scenario: (19, 8, True, True) occurences: 118 wins: 7
+scenario: (19, 9, False, False) occurences: 32847 wins: 15048
+scenario: (19, 9, False, True) occurences: 158 wins: 19
+scenario: (19, 9, True, False) occurences: 1732 wins: 814
+scenario: (19, 9, True, True) occurences: 106 wins: 14
+scenario: (19, 10, False, False) occurences: 140534 wins: 62349
+scenario: (19, 10, False, True) occurences: 177 wins: 16
+scenario: (19, 10, True, False) occurences: 5796 wins: 2540
+scenario: (19, 10, True, True) occurences: 103 wins: 6
+scenario: (20, 1, False, False) occurences: 60069 wins: 30671
+scenario: (20, 1, False, True) occurences: 101 wins: 4
+scenario: (20, 1, True, False) occurences: 1507 wins: 731
+scenario: (20, 1, True, True) occurences: 101 wins: 1
+scenario: (20, 2, False, False) occurences: 45343 wins: 34118
+scenario: (20, 2, False, True) occurences: 114 wins: 8
+scenario: (20, 2, True, False) occurences: 130 wins: 93
+scenario: (20, 2, True, True) occurences: 101 wins: 8
+scenario: (20, 3, False, False) occurences: 44142 wins: 33575
+scenario: (20, 3, False, True) occurences: 101 wins: 10
+scenario: (20, 3, True, False) occurences: 132 wins: 99
+scenario: (20, 3, True, True) occurences: 101 wins: 9
+scenario: (20, 4, False, False) occurences: 43676 wins: 33328
+scenario: (20, 4, False, True) occurences: 110 wins: 5
+scenario: (20, 4, True, False) occurences: 142 wins: 114
+scenario: (20, 4, True, True) occurences: 101 wins: 5
+scenario: (20, 5, False, False) occurences: 43818 wins: 34252
+scenario: (20, 5, False, True) occurences: 129 wins: 10
+scenario: (20, 5, True, False) occurences: 71 wins: 52
+scenario: (20, 5, True, True) occurences: 69 wins: 6
+scenario: (20, 6, False, False) occurences: 43667 wins: 34954
+scenario: (20, 6, False, True) occurences: 118 wins: 13
+scenario: (20, 6, True, False) occurences: 84 wins: 66
+scenario: (20, 6, True, True) occurences: 75 wins: 7
+scenario: (20, 7, False, False) occurences: 56980 wins: 48256
+scenario: (20, 7, False, True) occurences: 101 wins: 6
+scenario: (20, 7, True, False) occurences: 1535 wins: 1297
+scenario: (20, 7, True, True) occurences: 101 wins: 6
+scenario: (20, 8, False, False) occurences: 56844 wins: 48842
+scenario: (20, 8, False, True) occurences: 101 wins: 9
+scenario: (20, 8, True, False) occurences: 1842 wins: 1589
+scenario: (20, 8, True, True) occurences: 101 wins: 7
+scenario: (20, 9, False, False) occurences: 53983 wins: 43577
+scenario: (20, 9, False, True) occurences: 101 wins: 9
+scenario: (20, 9, True, False) occurences: 1478 wins: 1233
+scenario: (20, 9, True, True) occurences: 101 wins: 6
+scenario: (20, 10, False, False) occurences: 191710 wins: 108279
+scenario: (20, 10, False, True) occurences: 110 wins: 9
+scenario: (20, 10, True, False) occurences: 5389 wins: 2968
+scenario: (20, 10, True, True) occurences: 101 wins: 8
+
+total winning percentage = 43.212%
