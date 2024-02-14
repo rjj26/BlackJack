@@ -1,5 +1,5 @@
 Reese Johnson
-CS458 HW1: Black Jack
+Solving Black Jack using motecarlo simulations (agent learns from 5 million games)
 
 Function Descriptions:
 
@@ -1084,3 +1084,7 @@ scenario: (20, 10, True, False) occurences: 5389 wins: 2968
 scenario: (20, 10, True, True) occurences: 101 wins: 8
 
 total winning percentage = 43.212%
+
+NOTE: 
+This winning percentage is conditional on the dealer winning ties, which is not traditional black jack. 
+When simulated with a draw given a tie, the agent wins 49% of games.
